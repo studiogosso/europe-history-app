@@ -1,0 +1,1040 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ヨーロッパ史 Deep Dive</title>
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏛</text></svg>">
+<meta name="theme-color" content="#0a0a16">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0a0a16;--bg2:#12122a;--bg3:#1a1a3e;
+  --accent:#6c5ce7;--accent2:#a29bfe;--accent3:#4a3fc7;
+  --text:#e0e0f0;--text2:#9090b0;
+  --gold:#ffd700;--danger:#ff6b6b;--success:#2ecc71;
+  --card:rgba(22,22,58,.6);--card-solid:#16163a;
+  --border:rgba(255,255,255,.08);--border-hover:rgba(255,255,255,.15);
+  --glass:rgba(18,18,42,.65);--glass-border:rgba(255,255,255,.1);
+  --radius:14px;
+  --shadow:0 8px 32px rgba(0,0,0,.4);
+  --glow:0 0 20px rgba(108,92,231,.15);
+}
+html{scroll-behavior:smooth}
+body{font-family:'Segoe UI','Hiragino Sans','Noto Sans JP',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse at 20% 0%,rgba(108,92,231,.08) 0%,transparent 50%),radial-gradient(ellipse at 80% 100%,rgba(255,215,0,.04) 0%,transparent 50%);pointer-events:none;z-index:0}
+::-webkit-scrollbar{width:6px}
+::-webkit-scrollbar-track{background:var(--bg2)}
+::-webkit-scrollbar-thumb{background:var(--accent3);border-radius:3px}
+
+/* Glass utility */
+.glass{background:var(--glass);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid var(--glass-border)}
+
+/* Header */
+.header{position:sticky;top:0;z-index:100;background:rgba(12,12,30,.8);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid var(--glass-border);padding:14px 20px;display:flex;align-items:center;justify-content:space-between}
+.header h1{font-size:1.3rem;background:linear-gradient(135deg,var(--accent2),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:.05em;font-weight:800}
+.header-sub{font-size:.7rem;color:var(--text2);margin-top:2px}
+.header-right{display:flex;align-items:center;gap:10px}
+.header-stats{font-size:.65rem;color:var(--text2);text-align:right;line-height:1.5;display:none}
+@media(min-width:600px){.header-stats{display:block}}
+.header-actions{display:flex;gap:8px}
+.header-actions button{background:rgba(26,26,62,.7);backdrop-filter:blur(10px);border:1px solid var(--glass-border);color:var(--text);padding:7px 12px;border-radius:10px;cursor:pointer;font-size:.8rem;transition:all .25s ease}
+.header-actions button:hover,.header-actions button.active{background:var(--accent);border-color:var(--accent);box-shadow:0 0 12px rgba(108,92,231,.3)}
+
+/* Navigation */
+.nav{display:flex;gap:4px;padding:10px 12px;overflow-x:auto;background:rgba(12,12,30,.5);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--glass-border)}
+.nav::-webkit-scrollbar{height:0}
+.nav button{white-space:nowrap;padding:8px 16px;border:1px solid var(--border);background:var(--card);color:var(--text2);border-radius:22px;cursor:pointer;font-size:.78rem;transition:all .25s ease;flex-shrink:0;backdrop-filter:blur(8px)}
+.nav button:hover{border-color:var(--accent);color:var(--text)}
+.nav button.active{background:linear-gradient(135deg,var(--accent),var(--accent3));color:#fff;border-color:transparent;box-shadow:0 2px 12px rgba(108,92,231,.3)}
+.nav button .badge{display:inline-block;background:rgba(255,255,255,.2);font-size:.6rem;padding:1px 6px;border-radius:8px;margin-left:4px;vertical-align:middle}
+
+/* Country Filter */
+.country-bar{display:flex;gap:6px;padding:8px 12px;overflow-x:auto;background:rgba(10,10,22,.6);transition:all .3s ease;max-height:60px;opacity:1}
+.country-bar::-webkit-scrollbar{height:0}
+.country-bar.hidden{max-height:0;padding:0 12px;opacity:0;overflow:hidden}
+.country-bar button{padding:6px 14px;border:1px solid var(--border);background:var(--card);color:var(--text2);border-radius:18px;cursor:pointer;font-size:.72rem;transition:all .25s ease;flex-shrink:0}
+.country-bar button:hover{border-color:var(--accent2);color:var(--text)}
+.country-bar button.active{background:linear-gradient(135deg,var(--accent3),var(--accent));color:#fff;border-color:transparent;box-shadow:0 2px 8px rgba(108,92,231,.25)}
+
+/* Main */
+.main{max-width:1100px;margin:0 auto;padding:16px;position:relative;z-index:1}
+.section{display:none;animation:fadeIn .3s ease}
+.section.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+/* Timeline View */
+.timeline{position:relative;padding:20px 0 20px 40px}
+.timeline::before{content:'';position:absolute;left:18px;top:0;bottom:0;width:3px;background:linear-gradient(to bottom,var(--accent),var(--accent2),var(--gold));border-radius:2px;opacity:.6}
+.tl-item{position:relative;margin-bottom:24px;cursor:pointer;transition:all .25s ease}
+.tl-item:hover{transform:translateX(6px)}
+.tl-dot{position:absolute;left:-30px;top:8px;width:14px;height:14px;border-radius:50%;background:var(--accent);border:3px solid var(--bg);z-index:2;transition:all .25s ease}
+.tl-item:hover .tl-dot{background:var(--gold);box-shadow:0 0 16px rgba(255,215,0,.5)}
+.tl-item.bookmarked .tl-dot{background:var(--gold);box-shadow:0 0 8px rgba(255,215,0,.3)}
+.tl-card{background:var(--card);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid var(--glass-border);border-radius:var(--radius);padding:16px;transition:all .25s ease}
+.tl-card:hover{border-color:rgba(108,92,231,.4);box-shadow:var(--shadow),var(--glow)}
+.tl-era{font-size:.65rem;color:var(--accent2);margin-bottom:4px;letter-spacing:.1em;text-transform:uppercase;font-weight:600}
+.tl-title{font-size:1.05rem;font-weight:700;margin-bottom:6px}
+.tl-period{font-size:.75rem;color:var(--gold);margin-bottom:8px}
+.tl-desc{font-size:.82rem;color:var(--text2);line-height:1.6}
+.tl-tags{display:flex;flex-wrap:wrap;gap:4px;margin-top:10px}
+.tl-tag{font-size:.65rem;padding:3px 10px;border-radius:12px;background:rgba(26,26,62,.8);color:var(--accent2);border:1px solid var(--border)}
+
+/* Era Detail Modal */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);z-index:200;justify-content:center;align-items:start;padding:20px;overflow-y:auto}
+.modal-overlay.open{display:flex}
+.modal{background:rgba(18,18,42,.9);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border:1px solid var(--glass-border);border-radius:16px;max-width:800px;width:100%;padding:28px;position:relative;margin:20px auto;box-shadow:0 16px 48px rgba(0,0,0,.5)}
+.modal-close{position:absolute;top:14px;right:14px;background:rgba(255,255,255,.05);border:1px solid var(--border);color:var(--text2);width:32px;height:32px;border-radius:8px;cursor:pointer;font-size:1.2rem;display:flex;align-items:center;justify-content:center;transition:all .2s}
+.modal-close:hover{background:var(--danger);color:#fff;border-color:var(--danger)}
+.modal h2{font-size:1.3rem;margin-bottom:4px;color:var(--accent2)}
+.modal .period{font-size:.8rem;color:var(--gold);margin-bottom:16px}
+.modal-section{margin-bottom:16px}
+.modal-section h3{font-size:.9rem;color:var(--accent);margin-bottom:8px;padding-bottom:6px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:6px}
+.modal-section p,.modal-section li{font-size:.84rem;color:var(--text2);line-height:1.7}
+.modal-section ul{padding-left:18px}
+.modal-section li{margin-bottom:4px}
+.causal-box{background:rgba(26,26,62,.6);backdrop-filter:blur(8px);border-left:3px solid var(--gold);padding:14px;border-radius:0 10px 10px 0;margin-top:10px}
+.causal-box h4{font-size:.8rem;color:var(--gold);margin-bottom:6px}
+.causal-box p{font-size:.8rem;color:var(--text2);line-height:1.6}
+.bookmark-btn{background:rgba(26,26,62,.7);backdrop-filter:blur(8px);border:1px solid var(--border);color:var(--text2);padding:8px 16px;border-radius:10px;cursor:pointer;font-size:.8rem;margin-top:14px;transition:all .25s ease}
+.bookmark-btn:hover{border-color:var(--gold);color:var(--gold)}
+.bookmark-btn.active{background:linear-gradient(135deg,var(--gold),#e6c200);color:var(--bg);border-color:transparent;font-weight:600}
+
+/* People Grid */
+.people-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px}
+.person-card{background:var(--card);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid var(--glass-border);border-radius:var(--radius);padding:14px;cursor:pointer;transition:all .25s ease}
+.person-card:hover{border-color:rgba(108,92,231,.4);transform:translateY(-3px);box-shadow:var(--shadow),var(--glow)}
+.person-name{font-size:.95rem;font-weight:700;margin-bottom:2px}
+.person-name-sub{font-size:.72rem;color:var(--text2);margin-bottom:6px}
+.person-life{font-size:.7rem;color:var(--gold);margin-bottom:6px}
+.person-role{font-size:.72rem;color:var(--accent2);margin-bottom:8px;display:inline-block;padding:2px 8px;background:rgba(108,92,231,.15);border-radius:8px}
+.person-desc{font-size:.78rem;color:var(--text2);line-height:1.5}
+.person-countries{display:flex;gap:4px;margin-top:8px}
+.person-country{font-size:.6rem;padding:2px 8px;background:rgba(26,26,62,.8);border-radius:8px;color:var(--accent2);border:1px solid var(--border)}
+
+/* Connections */
+.conn-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px}
+.conn-card{background:var(--card);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid var(--glass-border);border-radius:var(--radius);padding:16px;transition:all .25s ease}
+.conn-card:hover{border-color:rgba(162,155,254,.3);box-shadow:var(--shadow)}
+.conn-title{font-size:.9rem;font-weight:700;color:var(--accent2);margin-bottom:6px}
+.conn-type{font-size:.68rem;padding:3px 10px;background:linear-gradient(135deg,var(--accent3),var(--accent));color:#fff;border-radius:12px;display:inline-block;margin-bottom:8px}
+.conn-desc{font-size:.8rem;color:var(--text2);line-height:1.6}
+.conn-eras{display:flex;gap:4px;margin-top:10px;flex-wrap:wrap}
+.conn-era{font-size:.65rem;padding:3px 10px;background:rgba(26,26,62,.8);border-radius:12px;color:var(--gold);border:1px solid var(--border);cursor:pointer;transition:all .2s}
+.conn-era:hover{border-color:var(--gold);background:rgba(255,215,0,.1)}
+
+/* Quiz */
+.quiz-container{max-width:600px;margin:0 auto}
+.quiz-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+.quiz-score{font-size:.85rem;color:var(--gold);font-weight:600}
+.quiz-progress{font-size:.8rem;color:var(--text2)}
+.quiz-question{background:var(--card);backdrop-filter:blur(12px);border:1px solid var(--glass-border);border-radius:var(--radius);padding:20px;margin-bottom:16px}
+.quiz-q{font-size:1rem;font-weight:600;margin-bottom:16px;line-height:1.6}
+.quiz-options{display:flex;flex-direction:column;gap:8px}
+.quiz-opt{padding:13px 18px;background:rgba(26,26,62,.6);backdrop-filter:blur(8px);border:1px solid var(--border);border-radius:10px;cursor:pointer;font-size:.85rem;transition:all .25s ease;text-align:left;color:var(--text)}
+.quiz-opt:hover:not(.disabled){border-color:var(--accent);background:rgba(108,92,231,.1)}
+.quiz-opt.correct{background:rgba(46,204,113,.15);border-color:var(--success);color:var(--success)}
+.quiz-opt.wrong{background:rgba(255,107,107,.15);border-color:var(--danger);color:var(--danger)}
+.quiz-opt.disabled{pointer-events:none;opacity:.85}
+.quiz-explain{font-size:.82rem;color:var(--text2);margin-top:14px;padding:14px;background:rgba(18,18,42,.7);border-radius:10px;line-height:1.7;display:none;border-left:3px solid var(--accent2)}
+.quiz-explain.show{display:block;animation:fadeIn .3s ease}
+.quiz-next{background:linear-gradient(135deg,var(--accent),var(--accent3));color:#fff;border:none;padding:10px 22px;border-radius:10px;cursor:pointer;font-size:.85rem;margin-top:14px;display:none;transition:all .25s ease}
+.quiz-next:hover{box-shadow:0 4px 16px rgba(108,92,231,.4);transform:translateY(-1px)}
+.quiz-next.show{display:inline-block}
+.quiz-result{text-align:center;padding:40px 20px}
+.quiz-result h2{font-size:1.8rem;background:linear-gradient(135deg,var(--gold),#ffed4a);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:12px}
+.quiz-result p{color:var(--text2);margin-bottom:12px}
+.quiz-restart{background:linear-gradient(135deg,var(--accent),var(--accent3));color:#fff;border:none;padding:12px 28px;border-radius:10px;cursor:pointer;font-size:.9rem;transition:all .25s ease}
+.quiz-restart:hover{box-shadow:0 4px 16px rgba(108,92,231,.4);transform:translateY(-1px)}
+
+/* Glossary */
+.glossary-search{width:100%;padding:12px 18px;background:var(--card);backdrop-filter:blur(12px);border:1px solid var(--glass-border);border-radius:10px;color:var(--text);font-size:.85rem;margin-bottom:16px;outline:none;transition:all .25s ease}
+.glossary-search:focus{border-color:var(--accent);box-shadow:0 0 12px rgba(108,92,231,.15)}
+.glossary-list{display:flex;flex-direction:column;gap:8px}
+.glossary-item{background:var(--card);backdrop-filter:blur(12px);border:1px solid var(--glass-border);border-radius:var(--radius);padding:14px;transition:all .25s ease}
+.glossary-item:hover{border-color:rgba(108,92,231,.3)}
+.glossary-term{font-size:.9rem;font-weight:700;color:var(--accent2);margin-bottom:4px}
+.glossary-reading{font-size:.7rem;color:var(--text2);margin-bottom:6px;font-style:italic}
+.glossary-def{font-size:.8rem;color:var(--text2);line-height:1.6}
+
+/* Bookmarks */
+.bookmarks-empty{text-align:center;padding:60px 20px;color:var(--text2)}
+.bookmarks-empty .empty-icon{font-size:2.5rem;margin-bottom:12px;opacity:.5}
+.bm-list{display:flex;flex-direction:column;gap:10px}
+.bm-item{background:var(--card);backdrop-filter:blur(12px);border:1px solid var(--glass-border);border-radius:var(--radius);padding:14px;display:flex;justify-content:space-between;align-items:center;transition:all .25s ease}
+.bm-item:hover{border-color:rgba(108,92,231,.3)}
+.bm-info{flex:1;cursor:pointer}
+.bm-title{font-size:.9rem;font-weight:600}
+.bm-type{font-size:.7rem;color:var(--accent2);margin-top:2px}
+.bm-remove{background:rgba(255,107,107,.1);border:1px solid rgba(255,107,107,.2);color:var(--danger);padding:6px 12px;border-radius:8px;cursor:pointer;font-size:.75rem;transition:all .2s}
+.bm-remove:hover{background:var(--danger);color:#fff;border-color:var(--danger)}
+
+/* Search */
+.search-bar{padding:8px 12px;background:rgba(10,10,22,.6);overflow:hidden;transition:all .3s ease;max-height:0;opacity:0}
+.search-bar.open{max-height:60px;opacity:1;padding:10px 12px}
+.search-input{width:100%;padding:10px 16px;background:var(--card);backdrop-filter:blur(12px);border:1px solid var(--glass-border);border-radius:10px;color:var(--text);font-size:.85rem;outline:none;transition:all .25s ease}
+.search-input:focus{border-color:var(--accent);box-shadow:0 0 12px rgba(108,92,231,.15)}
+
+/* Scroll to top */
+.scroll-top{position:fixed;bottom:20px;right:20px;width:42px;height:42px;background:rgba(108,92,231,.8);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.15);color:#fff;border-radius:12px;cursor:pointer;font-size:1rem;z-index:150;opacity:0;transform:translateY(10px);transition:all .3s ease;display:flex;align-items:center;justify-content:center}
+.scroll-top.visible{opacity:1;transform:translateY(0)}
+.scroll-top:hover{background:var(--accent);box-shadow:0 4px 16px rgba(108,92,231,.4)}
+
+/* Section count */
+.section-count{color:var(--text2);font-size:.8rem;margin-bottom:14px;padding:8px 14px;background:var(--card);backdrop-filter:blur(8px);border-radius:10px;border:1px solid var(--glass-border);display:inline-block}
+
+/* Responsive */
+@media(max-width:600px){
+  .header{padding:12px 14px}
+  .header h1{font-size:1.05rem}
+  .header-sub{font-size:.62rem}
+  .main{padding:10px}
+  .people-grid{grid-template-columns:1fr}
+  .conn-grid{grid-template-columns:1fr}
+  .modal{padding:18px;margin:10px;border-radius:14px}
+  .nav button{padding:7px 13px;font-size:.75rem}
+  .country-bar button{padding:5px 12px}
+  .quiz-opt{padding:14px 16px;min-height:44px}
+  .timeline{padding:16px 0 16px 32px}
+  .tl-dot{left:-24px;width:12px;height:12px}
+  .timeline::before{left:14px}
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div>
+    <h1>ヨーロッパ史 Deep Dive</h1>
+    <div class="header-sub">古代ギリシャから現代EUまで ― 政治・文化・社会の因果関係を読む</div>
+  </div>
+  <div class="header-right">
+    <div class="header-stats" id="headerStats"></div>
+    <div class="header-actions">
+      <button onclick="toggleSearch()" title="検索" id="searchToggle">検索</button>
+    </div>
+  </div>
+</div>
+
+<div class="search-bar" id="searchBar">
+  <input class="search-input" id="globalSearch" placeholder="キーワードで全体を検索..." oninput="handleGlobalSearch(this.value)">
+</div>
+
+<nav class="nav" id="mainNav">
+  <button class="active" data-tab="timeline">年表</button>
+  <button data-tab="eras">時代カード</button>
+  <button data-tab="people">人物 <span class="badge">63</span></button>
+  <button data-tab="connections">因果関係</button>
+  <button data-tab="quiz">クイズ</button>
+  <button data-tab="glossary">用語集</button>
+  <button data-tab="bookmarks">ブックマーク <span class="badge" id="bmBadge">0</span></button>
+</nav>
+
+<div class="country-bar" id="countryBar">
+  <button class="active" data-country="all">全て</button>
+  <button data-country="france">フランス</button>
+  <button data-country="germany">ドイツ</button>
+  <button data-country="britain">イギリス</button>
+  <button data-country="italy">イタリア</button>
+  <button data-country="spain">スペイン</button>
+  <button data-country="russia">ロシア</button>
+  <button data-country="greece">ギリシャ</button>
+  <button data-country="rome">ローマ</button>
+</div>
+
+<main class="main">
+  <div class="section active" id="sec-timeline"></div>
+  <div class="section" id="sec-eras"></div>
+  <div class="section" id="sec-people"></div>
+  <div class="section" id="sec-connections"></div>
+  <div class="section" id="sec-quiz"></div>
+  <div class="section" id="sec-glossary"></div>
+  <div class="section" id="sec-bookmarks"></div>
+</main>
+
+<div class="modal-overlay" id="modalOverlay" onclick="if(event.target===this)closeModal()">
+  <div class="modal" id="modalContent"></div>
+</div>
+
+<button class="scroll-top" id="scrollTop" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="ページ上部へ">&#9650;</button>
+
+<script>
+// ============================================================
+// DATA
+// ============================================================
+const ERAS = [
+  {
+    id:"ancient-greece",period:"800-146 BC",title:"古代ギリシャ",
+    countries:["greece"],
+    tags:["ポリス","民主制","哲学","オリンピック"],
+    summary:"ポリス（都市国家）を基盤とし、民主制・哲学・芸術が花開いた文明の源泉。",
+    politics:"各ポリスが独自の政治体制を持つ。アテナイは直接民主制、スパルタは二王制と寡頭制。ペルシャ戦争（前490-449）で団結するも、ペロポネソス戦争（前431-404）で内部分裂。最終的にマケドニアのフィリッポス2世に統合される。",
+    events:["ソロンの改革 (前594)","ペルシャ戦争 (前490-449)","ペリクレス時代 (前461-429)","ペロポネソス戦争 (前431-404)","アレクサンドロス東方遠征 (前334-323)"],
+    figures:["ペリクレス","ソクラテス","プラトン","アリストテレス","アレクサンドロス大王","ヘロドトス"],
+    culture:"哲学（ソクラテス・プラトン・アリストテレス）、悲劇（ソポクレス）、建築（パルテノン）、歴史学（ヘロドトス・トゥキュディデス）。ギリシャ哲学は西洋思想の根幹を形成。",
+    economy:"海上貿易が主軸。アテナイのラウレイオン銀山、陶器・オリーブ油の輸出。通貨経済の発展。",
+    causeBefore:"エーゲ文明（ミケーネ・ミノア）の崩壊後の暗黒時代を経て、前8世紀にポリスが形成。フェニキア文字を基にギリシャ文字が誕生。",
+    causeAfter:"ヘレニズム文明がオリエントと融合。ローマがギリシャ文化を吸収し、ギリシャ・ローマ文明として西洋文明の基盤に。民主制の理念は近代に再発見される。"
+  },
+  {
+    id:"rome",period:"753 BC - 476 AD",title:"ローマ",
+    countries:["rome","italy"],
+    tags:["共和政","帝政","法律","インフラ"],
+    summary:"共和政から帝政へ移行し、地中海世界を統一。法・道路・言語を通じて西洋文明の骨格を築いた。",
+    politics:"王政（前753-509）→共和政（前509-27）→帝政（前27-476）。元老院と護民官の権力闘争。カエサルの独裁を経てオクタウィアヌスがプリンキパトス（元首政）を確立。3世紀の危機後、ディオクレティアヌスがドミナートゥス（専制君主制）へ移行。テオドシウス帝の死後（395）東西に分裂。",
+    events:["共和政樹立 (前509)","ポエニ戦争 (前264-146)","カエサル暗殺 (前44)","パクス・ロマーナ (前27-180)","キリスト教公認 (313)","西ローマ帝国滅亡 (476)"],
+    figures:["カエサル","アウグストゥス","ネロ","トラヤヌス","コンスタンティヌス","テオドシウス"],
+    culture:"ギリシャ文化を継承・発展。ローマ法（十二表法→万民法）は近代法の基盤。ラテン語がロマンス諸語の母体。建築（コロッセウム、パンテオン、水道橋）。キリスト教が4世紀に国教化。",
+    economy:"地中海貿易の支配。属州からの穀物・税収。通貨制度。ラティフンディウム（大農園）。3世紀以降インフレと貨幣改鋳。",
+    causeBefore:"ギリシャ植民都市の影響、エトルリア文明の遺産。イタリア半島統一後に地中海覇権へ。",
+    causeAfter:"ゲルマン民族の移動と融合。キリスト教会がローマの遺産を継承。ローマ法・ラテン語・行政制度が中世ヨーロッパの基盤に。東ローマ帝国（ビザンツ）は1453年まで存続。"
+  },
+  {
+    id:"early-medieval",period:"476 - 1000",title:"中世初期",
+    countries:["france","germany","britain","italy"],
+    tags:["フランク王国","封建制","修道院","バイキング"],
+    summary:"ローマ帝国の崩壊後、ゲルマン諸王国が成立。封建制が形成され、キリスト教会が文明の維持者となった。",
+    politics:"ゲルマン諸王国の興亡。クローヴィスのフランク王国統一（481）。カロリング朝カール大帝の戴冠（800）でローマ帝国理念が復活。ヴェルダン条約（843）で三分割→フランス・ドイツ・イタリアの原型。アングロサクソン七王国がイングランド統一へ。",
+    events:["クローヴィスの改宗 (496)","ベネディクト修道会則 (529)","カール大帝戴冠 (800)","ヴェルダン条約 (843)","バイキングの侵攻 (793-)","神聖ローマ帝国成立 (962)"],
+    figures:["クローヴィス","カール大帝","アルフレッド大王","オットー1世","ベネディクトゥス"],
+    culture:"修道院が学問・写本の中心。カロリング・ルネサンス（カール大帝の文化振興）。ラテン語の教会独占。ケルト的キリスト教美術（装飾写本）。",
+    economy:"自給自足の荘園経済。貨幣経済の衰退。農業技術の漸進的発展（三圃制の萌芽）。バイキングによる交易路の開拓。",
+    causeBefore:"西ローマ帝国滅亡後のゲルマン人移動。ローマ文化とゲルマン慣習の融合。キリスト教会の統合力。",
+    causeAfter:"封建制の確立が盛期中世の社会基盤に。農業革命が人口増加を支え、都市復興と十字軍の原動力に。教会と世俗権力の二元構造が確立。"
+  },
+  {
+    id:"high-medieval",period:"1000 - 1300",title:"盛期中世",
+    countries:["france","germany","britain","italy","spain"],
+    tags:["十字軍","大学","ゴシック","マグナ・カルタ"],
+    summary:"農業革命による人口増加、十字軍、都市の復興、大学の誕生。中世文明の最盛期。",
+    politics:"教皇権と皇帝権の叙任権闘争（カノッサの屈辱 1077）。十字軍遠征（1096-1291）。フランスのカペー朝強化。イングランドのマグナ・カルタ（1215）で王権制限。レコンキスタの進展。",
+    events:["カノッサの屈辱 (1077)","第1回十字軍 (1096)","マグナ・カルタ (1215)","モンゴル来襲 (1241)","第4回十字軍コンスタンティノープル占領 (1204)"],
+    figures:["ウルバヌス2世","リチャード1世","フリードリヒ2世","トマス・アクィナス","フランチェスコ"],
+    culture:"スコラ哲学（トマス・アクィナス）。大学誕生（ボローニャ・パリ・オックスフォード）。ゴシック建築（ノートルダム）。騎士道文学。アラビア語経由でギリシャ哲学が再伝来。",
+    economy:"三圃制と重量有輪犂で農業生産増大。シャンパーニュ大市。ハンザ同盟。ギルドの発達。イタリア都市の地中海貿易。",
+    causeBefore:"中世初期の安定化と農業革命が人口増加を可能に。クリュニー改革による教会の権威回復。",
+    causeAfter:"十字軍の失敗が教皇権威を低下。人口増加と気候変動が14世紀の危機を準備。大学での学問的蓄積がルネサンスの知的基盤に。"
+  },
+  {
+    id:"14th-crisis",period:"1300 - 1400",title:"危機の14世紀",
+    countries:["france","britain","italy","germany"],
+    tags:["黒死病","百年戦争","大分裂","飢饉"],
+    summary:"黒死病・百年戦争・教会大分裂が重なり、中世的秩序が根底から動揺した転換期。",
+    politics:"百年戦争（1337-1453）の開始。アヴィニョン捕囚（1309-1377）と教会大分裂（1378-1417）で教皇権が失墜。農民反乱の頻発（ジャックリーの乱、ワット・タイラーの乱）。",
+    events:["アヴィニョン捕囚 (1309-1377)","百年戦争開始 (1337)","黒死病 (1347-1351)","ジャックリーの乱 (1358)","教会大分裂 (1378-1417)"],
+    figures:["エドワード3世","フィリップ6世","ボニファティウス8世","ペトラルカ","ボッカッチョ"],
+    culture:"ペトラルカの人文主義萌芽。ボッカッチョ『デカメロン』。「死の舞踏」モチーフ。既存の権威への懐疑。俗語文学の発展。",
+    economy:"黒死病で人口が1/3減少。労働力不足→農奴制の弛緩。賃金上昇と社会的流動性の増大。銀行（バルディ・ペルッツィ）の破綻。",
+    causeBefore:"盛期中世の人口増加が環境限界に。小氷期の到来。モンゴル帝国経由でペストが伝播。",
+    causeAfter:"封建制の解体が加速。農奴解放と市民階級の台頭がルネサンスと宗教改革の社会的前提に。国民意識の萌芽（ジャンヌ・ダルク）。"
+  },
+  {
+    id:"renaissance",period:"1400 - 1600",title:"ルネサンス",
+    countries:["italy","france","germany","britain","spain"],
+    tags:["人文主義","芸術","メディチ","印刷術"],
+    summary:"古代ギリシャ・ローマの再発見を通じた文化的大革新。イタリア都市国家から全欧に波及。",
+    politics:"イタリア都市国家の興隆（フィレンツェ、ヴェネツィア、ミラノ）。メディチ家の支配。イタリア戦争（1494-1559）でフランス・スペインが介入。マキャヴェリの現実主義政治学。主権国家の萌芽。",
+    events:["コンスタンティノープル陥落 (1453)","グーテンベルク印刷術 (c.1450)","コロンブス新大陸到達 (1492)","イタリア戦争 (1494-1559)","マキャヴェリ『君主論』(1513)"],
+    figures:["ロレンツォ・デ・メディチ","レオナルド・ダ・ヴィンチ","ミケランジェロ","ラファエロ","マキャヴェリ","エラスムス","グーテンベルク"],
+    culture:"人文主義（ヒューマニズム）。遠近法の発明。レオナルド・ミケランジェロ・ラファエロの三大巨匠。印刷術の革命。エラスムスの聖書研究。ルネサンス建築。",
+    economy:"メディチ銀行。大航海時代の開始で経済の重心が地中海から大西洋に移動。毛織物・銀行業。価格革命（新大陸の銀流入）。",
+    causeBefore:"14世紀の危機後の再建。ビザンツ帝国崩壊でギリシャ学者がイタリアに亡命。イタリア都市国家の富裕化。",
+    causeAfter:"人文主義的聖書研究が宗教改革の知的準備に。印刷術が思想の急速な伝播を可能に。科学革命の基盤。主権国家体制への移行。"
+  },
+  {
+    id:"reformation",period:"1517 - 1648",title:"宗教改革",
+    countries:["germany","france","britain","spain"],
+    tags:["ルター","カルヴァン","三十年戦争","ウェストファリア"],
+    summary:"ルターの95か条の論題に始まるキリスト教の分裂。三十年戦争を経てウェストファリア体制が成立。",
+    politics:"ルターの宗教改革（1517）。アウクスブルクの和議（1555）で領主の信仰選択権。イングランド国教会成立（1534）。ユグノー戦争（1562-1598）。三十年戦争（1618-1648）でヨーロッパ全土が巻き込まれ、ウェストファリア条約で主権国家体制が確立。",
+    events:["95か条の論題 (1517)","アウクスブルクの和議 (1555)","イングランド国教会成立 (1534)","トリエント公会議 (1545-1563)","三十年戦争 (1618-1648)","ウェストファリア条約 (1648)"],
+    figures:["マルティン・ルター","ジャン・カルヴァン","ヘンリー8世","カール5世","イグナティウス・ロヨラ","グスタフ・アドルフ"],
+    culture:"聖書の俗語翻訳（ルター聖書）。プロテスタントの勤労倫理。対抗宗教改革（イエズス会）。バロック芸術の萌芽。宗教論争が知的自由への道を開く。",
+    economy:"修道院財産の世俗化。プロテスタント諸国の経済的発展。オランダの商業革命。三十年戦争による中欧の荒廃。",
+    causeBefore:"ルネサンス人文主義による聖書研究。印刷術による情報伝播。教会の腐敗（贖宥状問題）。",
+    causeAfter:"ウェストファリア体制が近代国際秩序の基盤に。信仰の多元化が寛容思想と啓蒙主義を準備。プロテスタント倫理と資本主義の関係（ウェーバー）。"
+  },
+  {
+    id:"absolutism",period:"1648 - 1789",title:"絶対王政と啓蒙",
+    countries:["france","russia","britain","germany","spain"],
+    tags:["ルイ14世","啓蒙思想","科学革命","名誉革命"],
+    summary:"絶対君主が権力を集中させる一方、啓蒙思想が理性による社会変革を唱え、革命の知的基盤を築いた。",
+    politics:"フランス：ルイ14世の絶対王政の極致（「朕は国家なり」）。イギリス：名誉革命（1688）で立憲君主制。ロシア：ピョートル大帝の西欧化。プロイセン：フリードリヒ大王の啓蒙専制。スペイン継承戦争・七年戦争で大国の勢力均衡。",
+    events:["ルイ14世親政 (1661)","名誉革命 (1688)","スペイン継承戦争 (1701-1714)","ピョートル大帝の改革","七年戦争 (1756-1763)","百科全書刊行 (1751-1772)"],
+    figures:["ルイ14世","ピョートル大帝","フリードリヒ大王","ヴォルテール","モンテスキュー","ルソー","ロック","ニュートン"],
+    culture:"科学革命（ニュートン、ガリレオ）。啓蒙思想（ヴォルテール、モンテスキュー、ルソー）。百科全書。ヴェルサイユ宮殿。バロック→ロココ芸術。音楽（バッハ、モーツァルト）。",
+    economy:"重商主義政策。コルベールの産業育成。植民地貿易の拡大。農業改革。東インド会社。砂糖・奴隷貿易（三角貿易）。",
+    causeBefore:"ウェストファリア後の主権国家確立。宗教戦争の疲弊が世俗的統治を要求。科学革命が理性への信頼を醸成。",
+    causeAfter:"啓蒙思想が社会契約論・人権思想を体系化し、アメリカ独立革命とフランス革命の理論的武器に。フランスの財政危機が革命の直接的原因に。"
+  },
+  {
+    id:"revolution-nation",period:"1789 - 1871",title:"革命と国民国家",
+    countries:["france","germany","italy","britain","russia"],
+    tags:["フランス革命","ナポレオン","ウィーン体制","統一運動"],
+    summary:"フランス革命がアンシャン・レジームを打倒。ナポレオン戦争後のウィーン体制を経て、自由主義とナショナリズムが国民国家を形成。",
+    politics:"フランス革命（1789）→ナポレオン帝政（1804-1815）。ウィーン体制（1815）で王政復古。1830年・1848年革命。イタリア統一（1861）。ドイツ統一（1871）。ビスマルクの鉄血政策。",
+    events:["バスティーユ襲撃 (1789)","人権宣言 (1789)","ナポレオン戴冠 (1804)","ウィーン会議 (1815)","諸国民の春 (1848)","イタリア統一 (1861)","ドイツ統一 (1871)"],
+    figures:["ロベスピエール","ナポレオン","メッテルニヒ","ビスマルク","カヴール","ガリバルディ","マルクス"],
+    culture:"ロマン主義（ゲーテ、ドラクロワ）。国民意識の高揚。社会主義思想（マルクス、エンゲルス）。歴史学の発展。市民文化の開花。",
+    economy:"産業革命の進展（イギリス→大陸）。鉄道の普及。自由貿易vs保護貿易。労働者階級の形成。資本主義の確立と社会問題。",
+    causeBefore:"啓蒙思想と財政危機。アメリカ独立の影響。市民階級の成長と旧体制への不満。",
+    causeAfter:"国民国家体制の確立が帝国主義競争を激化。ドイツ統一後の勢力均衡崩壊がWWIの遠因。社会主義運動の台頭。"
+  },
+  {
+    id:"imperialism-wwi",period:"1871 - 1918",title:"帝国主義〜WWI",
+    countries:["britain","france","germany","russia","italy","spain"],
+    tags:["帝国主義","同盟体制","総力戦","革命"],
+    summary:"列強のアフリカ・アジア分割競争が激化。同盟体制の硬直化が第一次世界大戦の悲劇を招いた。",
+    politics:"ビスマルク外交と同盟体制。ヴィルヘルム2世の世界政策。三国同盟vs三国協商。バルカン危機。サラエボ事件（1914）→WWI。塹壕戦の膠着。ロシア革命（1917）。ドイツ革命で帝政崩壊。",
+    events:["ベルリン会議 (1878)","アフリカ分割 (1880s-)","日露戦争 (1904-05)","サラエボ事件 (1914)","ロシア革命 (1917)","休戦 (1918)"],
+    figures:["ヴィルヘルム2世","ビスマルク","レーニン","クレマンソー","ロイド・ジョージ"],
+    culture:"ベルエポック。印象派→前衛芸術。ニーチェの哲学。大衆文化の誕生。戦争文学。",
+    economy:"第二次産業革命（電気・化学・石油）。帝国主義的市場・資源獲得。軍拡競争。戦時経済体制。",
+    causeBefore:"国民国家間の競争激化。産業力と軍事力の結合。ナショナリズムの過激化。",
+    causeAfter:"ヴェルサイユ体制の矛盾がWWIIを準備。民族自決原則と新国家の誕生。ロシア革命で社会主義国家が成立。アメリカの台頭。"
+  },
+  {
+    id:"interwar-wwii",period:"1918 - 1945",title:"戦間期〜WWII",
+    countries:["germany","italy","france","britain","russia","spain"],
+    tags:["ヴァイマル","ファシズム","ホロコースト","総力戦"],
+    summary:"大戦後の不安定な秩序の中でファシズムが台頭。第二次世界大戦とホロコーストという人類史上最悪の悲劇へ。",
+    politics:"ヴァイマル共和国の苦闘。ムッソリーニのファシズム（1922）。ヒトラーのナチ政権（1933）。スペイン内戦（1936-39）。宥和政策の失敗。WWII（1939-45）。ヤルタ・ポツダム会談で戦後秩序。",
+    events:["ヴェルサイユ条約 (1919)","ムッソリーニ政権 (1922)","世界恐慌 (1929)","ヒトラー政権 (1933)","スペイン内戦 (1936-39)","WWII開戦 (1939)","ノルマンディー上陸 (1944)","ドイツ降伏 (1945)"],
+    figures:["ヒトラー","ムッソリーニ","チャーチル","ド・ゴール","スターリン","フランコ"],
+    culture:"表現主義、ダダ、シュルレアリスム。バウハウス。亡命知識人。プロパガンダ芸術。戦後の実存主義。ホロコーストの記憶と文学。",
+    economy:"戦後賠償とインフレ。1920年代の繁栄と1929年世界恐慌。ケインズ経済学。軍需経済。戦争による破壊。",
+    causeBefore:"ヴェルサイユ体制の矛盾。世界恐慌による社会不安。民主主義の危機。",
+    causeAfter:"冷戦構造の形成。欧州統合の出発点（二度と戦争を繰り返さない）。人権・国際法の発展。脱植民地化の加速。"
+  },
+  {
+    id:"cold-war-eu",period:"1945 - 現在",title:"冷戦〜EU",
+    countries:["france","germany","britain","italy","russia","spain"],
+    tags:["冷戦","EU統合","ベルリンの壁","ブレグジット"],
+    summary:"東西冷戦の対立を経て、ヨーロッパは統合への道を歩む。ベルリンの壁崩壊後、EUが拡大するも新たな課題に直面。",
+    politics:"鉄のカーテン。NATO vs ワルシャワ条約。マーシャルプラン。欧州石炭鉄鋼共同体（1951）→EEC→EU。ベルリンの壁崩壊（1989）。EU拡大。ブレグジット（2020）。ウクライナ危機。",
+    events:["マーシャルプラン (1948)","NATO設立 (1949)","ローマ条約 (1957)","ベルリンの壁建設 (1961)","プラハの春 (1968)","ベルリンの壁崩壊 (1989)","マーストリヒト条約 (1992)","ユーロ導入 (2002)","ブレグジット (2020)"],
+    figures:["チャーチル","シューマン","アデナウアー","ド・ゴール","ゴルバチョフ","コール","メルケル"],
+    culture:"実存主義（サルトル）。戦後復興と消費文化。68年運動。ポストモダン。欧州の文化的多様性と統一性。",
+    economy:"戦後復興（経済の奇跡）。福祉国家の建設。共通市場→単一市場。ユーロ導入。2008年金融危機。格差と移民問題。",
+    causeBefore:"二度の大戦の反省。米ソ超大国の出現による欧州の相対的地位低下。",
+    causeAfter:"EU統合の深化と課題（主権 vs 統合、民主主義の赤字、ポピュリズム）。グローバル化時代の欧州のアイデンティティ。"
+  }
+];
+
+const PEOPLE = [
+  {name:"ペリクレス",sub:"Pericles",life:"前495-429",era:"ancient-greece",countries:["greece"],role:"政治家",desc:"アテナイ民主制の黄金期を指導。パルテノン神殿建設を推進。ペロポネソス戦争初期にペストで死去。"},
+  {name:"ソクラテス",sub:"Socrates",life:"前469-399",era:"ancient-greece",countries:["greece"],role:"哲学者",desc:"「無知の知」を唱え対話法で真理を追究。青年を堕落させた罪で処刑。西洋哲学の祖。"},
+  {name:"プラトン",sub:"Plato",life:"前427-347",era:"ancient-greece",countries:["greece"],role:"哲学者",desc:"アカデメイアを設立。イデア論を展開。『国家』で理想的政体を論じた。"},
+  {name:"アリストテレス",sub:"Aristotle",life:"前384-322",era:"ancient-greece",countries:["greece"],role:"哲学者",desc:"プラトンの弟子。論理学・自然学・倫理学を体系化。アレクサンドロスの師。万学の祖。"},
+  {name:"アレクサンドロス大王",sub:"Alexander the Great",life:"前356-323",era:"ancient-greece",countries:["greece"],role:"王・征服者",desc:"マケドニア王。東方遠征でペルシャ帝国を征服し、ヘレニズム世界を創出。33歳で急死。"},
+  {name:"ヘロドトス",sub:"Herodotus",life:"前484-425頃",era:"ancient-greece",countries:["greece"],role:"歴史家",desc:"『歴史』でペルシャ戦争を記述。「歴史の父」と呼ばれる。"},
+  {name:"カエサル",sub:"Julius Caesar",life:"前100-44",era:"rome",countries:["rome","italy"],role:"将軍・独裁官",desc:"ガリア征服で名声を得、ルビコン川を渡り内戦に勝利。終身独裁官となるも元老院派に暗殺。"},
+  {name:"アウグストゥス",sub:"Augustus",life:"前63-後14",era:"rome",countries:["rome","italy"],role:"初代皇帝",desc:"カエサルの養子。内戦を制しプリンキパトスを確立。パクス・ロマーナの創始者。"},
+  {name:"ネロ",sub:"Nero",life:"37-68",era:"rome",countries:["rome","italy"],role:"皇帝",desc:"暴君の代名詞。ローマ大火とキリスト教徒迫害。最後は自殺。"},
+  {name:"トラヤヌス",sub:"Trajan",life:"53-117",era:"rome",countries:["rome","italy"],role:"皇帝",desc:"五賢帝の一人。帝国の最大版図を実現。ダキア戦争で領土拡大。"},
+  {name:"コンスタンティヌス",sub:"Constantine I",life:"272-337",era:"rome",countries:["rome"],role:"皇帝",desc:"ミラノ勅令でキリスト教を公認。コンスタンティノープル建設。帝国再統一。"},
+  {name:"テオドシウス",sub:"Theodosius I",life:"347-395",era:"rome",countries:["rome"],role:"皇帝",desc:"キリスト教を国教化。死後帝国が東西に分裂する最後の統一皇帝。"},
+  {name:"クローヴィス",sub:"Clovis I",life:"466-511",era:"early-medieval",countries:["france"],role:"フランク王",desc:"フランク王国を統一しカトリックに改宗。メロヴィング朝の事実上の創始者。"},
+  {name:"カール大帝",sub:"Charlemagne",life:"742-814",era:"early-medieval",countries:["france","germany","italy"],role:"フランク王・皇帝",desc:"西ヨーロッパの大部分を統一。800年にローマ皇帝戴冠。カロリング・ルネサンスを推進。「ヨーロッパの父」。"},
+  {name:"アルフレッド大王",sub:"Alfred the Great",life:"849-899",era:"early-medieval",countries:["britain"],role:"イングランド王",desc:"ウェセックス王。バイキングの侵攻を防ぎ、学問振興と法典整備を推進。"},
+  {name:"オットー1世",sub:"Otto I",life:"912-973",era:"early-medieval",countries:["germany","italy"],role:"皇帝",desc:"神聖ローマ帝国を創設（962年戴冠）。ドイツ王権とイタリア支配を確立。"},
+  {name:"ウルバヌス2世",sub:"Urban II",life:"1042-1099",era:"high-medieval",countries:["france","italy"],role:"教皇",desc:"クレルモン教会会議で第1回十字軍を呼びかけ（1095）。"},
+  {name:"リチャード1世",sub:"Richard I",life:"1157-1199",era:"high-medieval",countries:["britain"],role:"イングランド王",desc:"獅子心王。第3回十字軍でサラディンと戦う。軍事的武勇で知られるが、イングランドにはほとんど滞在せず。"},
+  {name:"フリードリヒ2世",sub:"Frederick II",life:"1194-1250",era:"high-medieval",countries:["germany","italy"],role:"皇帝",desc:"「世界の驚異」。シチリアで多文化的宮廷を運営。教皇と激しく対立。"},
+  {name:"トマス・アクィナス",sub:"Thomas Aquinas",life:"1225-1274",era:"high-medieval",countries:["italy"],role:"神学者",desc:"スコラ哲学の大成者。『神学大全』でキリスト教神学とアリストテレス哲学を統合。"},
+  {name:"ダンテ",sub:"Dante Alighieri",life:"1265-1321",era:"14th-crisis",countries:["italy"],role:"詩人",desc:"『神曲』で中世的世界観を壮大に描写。イタリア語文学の父。"},
+  {name:"ペトラルカ",sub:"Petrarch",life:"1304-1374",era:"14th-crisis",countries:["italy"],role:"詩人・学者",desc:"人文主義の父。古典ラテン文学の復興を主導。抒情詩集で近代叙情詩の基盤。"},
+  {name:"ジャンヌ・ダルク",sub:"Joan of Arc",life:"1412-1431",era:"14th-crisis",countries:["france"],role:"軍事指導者",desc:"神の啓示を受けたとしてフランス軍を指揮。オルレアン解放。異端として火刑。フランス国民意識の象徴。"},
+  {name:"ロレンツォ・デ・メディチ",sub:"Lorenzo de' Medici",life:"1449-1492",era:"renaissance",countries:["italy"],role:"フィレンツェ支配者",desc:"「偉大なるロレンツォ」。フィレンツェの繁栄を主導し、芸術家のパトロン。"},
+  {name:"レオナルド・ダ・ヴィンチ",sub:"Leonardo da Vinci",life:"1452-1519",era:"renaissance",countries:["italy","france"],role:"万能人",desc:"『モナ・リザ』『最後の晩餐』。画家・彫刻家・科学者・技術者。ルネサンスの象徴。"},
+  {name:"ミケランジェロ",sub:"Michelangelo",life:"1475-1564",era:"renaissance",countries:["italy"],role:"芸術家",desc:"『ダビデ像』、システィーナ礼拝堂天井画。彫刻・絵画・建築に卓越。"},
+  {name:"ラファエロ",sub:"Raphael",life:"1483-1520",era:"renaissance",countries:["italy"],role:"画家",desc:"『アテナイの学堂』。調和と美の理想を体現。37歳で夭折。"},
+  {name:"マキャヴェリ",sub:"Machiavelli",life:"1469-1527",era:"renaissance",countries:["italy"],role:"政治思想家",desc:"『君主論』で権力の現実主義を論じた。近代政治学の祖。"},
+  {name:"エラスムス",sub:"Erasmus",life:"1466-1536",era:"renaissance",countries:["germany"],role:"人文学者",desc:"『愚神礼賛』で教会を風刺。ギリシャ語新約聖書の校訂。北方ルネサンスの代表。"},
+  {name:"グーテンベルク",sub:"Gutenberg",life:"1400頃-1468",era:"renaissance",countries:["germany"],role:"発明家",desc:"活版印刷術を発明。グーテンベルク聖書。知識の民主化に革命的貢献。"},
+  {name:"コロンブス",sub:"Columbus",life:"1451-1506",era:"renaissance",countries:["italy","spain"],role:"探検家",desc:"1492年に新大陸に到達。大航海時代の幕開け。世界史の転換点。"},
+  {name:"マルティン・ルター",sub:"Martin Luther",life:"1483-1546",era:"reformation",countries:["germany"],role:"宗教改革者",desc:"95か条の論題を発表。聖書のドイツ語訳。プロテスタント運動の創始者。"},
+  {name:"ジャン・カルヴァン",sub:"John Calvin",life:"1509-1564",era:"reformation",countries:["france","germany"],role:"宗教改革者",desc:"ジュネーヴで神政政治を実現。予定説。カルヴァン主義はイギリス・オランダ・スコットランドに広がる。"},
+  {name:"ヘンリー8世",sub:"Henry VIII",life:"1491-1547",era:"reformation",countries:["britain"],role:"イングランド王",desc:"離婚問題から教皇と決裂しイングランド国教会を設立。6人の妻。"},
+  {name:"カール5世",sub:"Charles V",life:"1500-1558",era:"reformation",countries:["germany","spain","italy"],role:"神聖ローマ皇帝",desc:"ハプスブルク帝国の頂点。スペイン王兼任。宗教改革とオスマン帝国の両方に対処。最後は退位。"},
+  {name:"エリザベス1世",sub:"Elizabeth I",life:"1533-1603",era:"reformation",countries:["britain"],role:"イングランド女王",desc:"「処女王」。英国国教会を確立。スペイン無敵艦隊を撃破。エリザベス朝文化の黄金期。"},
+  {name:"フェリペ2世",sub:"Philip II",life:"1527-1598",era:"reformation",countries:["spain"],role:"スペイン王",desc:"カトリック擁護者。「太陽の沈まぬ帝国」。無敵艦隊の敗北でスペインの衰退開始。"},
+  {name:"グスタフ・アドルフ",sub:"Gustavus Adolphus",life:"1594-1632",era:"reformation",countries:["germany"],role:"スウェーデン王",desc:"三十年戦争でプロテスタント陣営を指揮。近代的軍事改革。リュッツェンの戦いで戦死。"},
+  {name:"ルイ14世",sub:"Louis XIV",life:"1638-1715",era:"absolutism",countries:["france"],role:"フランス王",desc:"「太陽王」。絶対王政の頂点。ヴェルサイユ宮殿。72年の治世。対外戦争と文化的栄華。"},
+  {name:"ピョートル大帝",sub:"Peter the Great",life:"1672-1725",era:"absolutism",countries:["russia"],role:"ロシア皇帝",desc:"ロシアの西欧化・近代化を強行。サンクトペテルブルク建設。北方戦争でバルト海進出。"},
+  {name:"フリードリヒ大王",sub:"Frederick the Great",life:"1712-1786",era:"absolutism",countries:["germany"],role:"プロイセン王",desc:"啓蒙専制君主。七年戦争でプロイセンを大国に。フルート奏者でもあった。"},
+  {name:"ヴォルテール",sub:"Voltaire",life:"1694-1778",era:"absolutism",countries:["france"],role:"思想家",desc:"啓蒙思想の旗手。宗教的不寛容を批判。「私はあなたの意見に反対だが、あなたの発言する権利は命をかけて守る」。"},
+  {name:"モンテスキュー",sub:"Montesquieu",life:"1689-1755",era:"absolutism",countries:["france"],role:"思想家",desc:"『法の精神』で三権分立を提唱。近代立憲主義の理論的基盤。"},
+  {name:"ルソー",sub:"Rousseau",life:"1712-1778",era:"absolutism",countries:["france"],role:"思想家",desc:"『社会契約論』で人民主権を主張。「自然に帰れ」。フランス革命の理論的源泉。"},
+  {name:"ジョン・ロック",sub:"John Locke",life:"1632-1704",era:"absolutism",countries:["britain"],role:"思想家",desc:"『統治二論』で自然権と社会契約を論じた。名誉革命の正当化。自由主義の父。"},
+  {name:"ニュートン",sub:"Isaac Newton",life:"1643-1727",era:"absolutism",countries:["britain"],role:"科学者",desc:"万有引力の法則。『プリンキピア』。微積分法。科学革命を完成。"},
+  {name:"バッハ",sub:"J.S. Bach",life:"1685-1750",era:"absolutism",countries:["germany"],role:"作曲家",desc:"バロック音楽の大成者。『マタイ受難曲』『平均律クラヴィーア』。「音楽の父」。"},
+  {name:"ロベスピエール",sub:"Robespierre",life:"1758-1794",era:"revolution-nation",countries:["france"],role:"革命指導者",desc:"ジャコバン派指導者。恐怖政治を主導。テルミドール反動で処刑。"},
+  {name:"ナポレオン",sub:"Napoleon Bonaparte",life:"1769-1821",era:"revolution-nation",countries:["france"],role:"皇帝",desc:"フランス革命の成果を制度化（ナポレオン法典）。ヨーロッパ征服。ワーテルロー敗北後セントヘレナに流刑。"},
+  {name:"メッテルニヒ",sub:"Metternich",life:"1773-1859",era:"revolution-nation",countries:["germany"],role:"政治家",desc:"ウィーン会議を主導。正統主義と勢力均衡で保守的秩序を維持。1848年革命で失脚。"},
+  {name:"ビスマルク",sub:"Bismarck",life:"1815-1898",era:"revolution-nation",countries:["germany"],role:"宰相",desc:"鉄血政策でドイツ統一を実現。三つの戦争（デンマーク・オーストリア・フランス）。巧みな外交。"},
+  {name:"カヴール",sub:"Cavour",life:"1810-1861",era:"revolution-nation",countries:["italy"],role:"政治家",desc:"サルデーニャ王国首相。外交と政治手腕でイタリア統一を推進。統一直後に死去。"},
+  {name:"ガリバルディ",sub:"Garibaldi",life:"1807-1882",era:"revolution-nation",countries:["italy"],role:"革命家",desc:"千人隊で南イタリアを征服。「二つのシチリア」の解放者。イタリア統一の英雄。"},
+  {name:"マルクス",sub:"Karl Marx",life:"1818-1883",era:"revolution-nation",countries:["germany","britain"],role:"思想家",desc:"『資本論』『共産党宣言』。史的唯物論。資本主義の分析と社会主義の理論。20世紀に巨大な影響。"},
+  {name:"ヴィクトリア女王",sub:"Queen Victoria",life:"1819-1901",era:"imperialism-wwi",countries:["britain"],role:"イギリス女王",desc:"ヴィクトリア朝。大英帝国の最盛期。63年の治世。「ヨーロッパの祖母」。"},
+  {name:"ヴィルヘルム2世",sub:"Wilhelm II",life:"1859-1941",era:"imperialism-wwi",countries:["germany"],role:"ドイツ皇帝",desc:"ビスマルクを罷免し世界政策を推進。海軍増強でイギリスと対立。WWI後退位。"},
+  {name:"レーニン",sub:"Lenin",life:"1870-1924",era:"imperialism-wwi",countries:["russia"],role:"革命指導者",desc:"十月革命でソヴィエト政権を樹立。マルクス主義の実践者。ソ連の建国者。"},
+  {name:"ヒトラー",sub:"Adolf Hitler",life:"1889-1945",era:"interwar-wwii",countries:["germany"],role:"独裁者",desc:"ナチ党指導者。ファシズム・人種主義・膨張政策でWWIIを引き起こした。ホロコーストで600万人のユダヤ人を虐殺。"},
+  {name:"ムッソリーニ",sub:"Mussolini",life:"1883-1945",era:"interwar-wwii",countries:["italy"],role:"独裁者",desc:"ファシスト党を率いイタリアを独裁支配。ローマ進軍（1922）。エチオピア侵略。最後はパルチザンに処刑。"},
+  {name:"チャーチル",sub:"Winston Churchill",life:"1874-1965",era:"interwar-wwii",countries:["britain"],role:"首相",desc:"WWII中のイギリス首相。「血と汗と涙と労苦」の演説で国民を鼓舞。「鉄のカーテン」演説。"},
+  {name:"ド・ゴール",sub:"Charles de Gaulle",life:"1890-1970",era:"interwar-wwii",countries:["france"],role:"指導者・大統領",desc:"自由フランスを指導。戦後第五共和政を創設。独自の外交路線。"},
+  {name:"スターリン",sub:"Joseph Stalin",life:"1878-1953",era:"interwar-wwii",countries:["russia"],role:"ソ連指導者",desc:"レーニン後のソ連を独裁支配。工業化と大粛清。WWII後に東欧を衛星国化。"},
+  {name:"フランコ",sub:"Francisco Franco",life:"1892-1975",era:"interwar-wwii",countries:["spain"],role:"独裁者",desc:"スペイン内戦で勝利し独裁政権を樹立。1975年まで統治。死後スペインは民主化。"},
+  {name:"シューマン",sub:"Robert Schuman",life:"1886-1963",era:"cold-war-eu",countries:["france"],role:"政治家",desc:"シューマン宣言（1950）で欧州統合を提唱。欧州石炭鉄鋼共同体の創設者。「EUの父」の一人。"},
+  {name:"アデナウアー",sub:"Konrad Adenauer",life:"1876-1967",era:"cold-war-eu",countries:["germany"],role:"西ドイツ首相",desc:"戦後西ドイツの復興と西側統合を主導。フランスとの和解。経済の奇跡の時代。"},
+  {name:"ゴルバチョフ",sub:"Mikhail Gorbachev",life:"1931-2022",era:"cold-war-eu",countries:["russia"],role:"ソ連指導者",desc:"ペレストロイカとグラスノスチで改革を推進。冷戦終結に貢献。ソ連崩壊を招く。ノーベル平和賞。"},
+  {name:"コール",sub:"Helmut Kohl",life:"1930-2017",era:"cold-war-eu",countries:["germany"],role:"ドイツ首相",desc:"ドイツ再統一を実現（1990）。EU統合の推進者。マーストリヒト条約に尽力。"},
+  {name:"メルケル",sub:"Angela Merkel",life:"1954-",era:"cold-war-eu",countries:["germany"],role:"ドイツ首相",desc:"2005-2021在任。ユーロ危機・難民危機に対処。EU最大の経済大国を指導。"},
+  {name:"サルトル",sub:"Jean-Paul Sartre",life:"1905-1980",era:"cold-war-eu",countries:["france"],role:"哲学者",desc:"実存主義の代表者。「実存は本質に先立つ」。ノーベル文学賞を辞退。知識人の社会的責任を体現。"}
+];
+
+const CONNECTIONS = [
+  {title:"ギリシャ哲学→ローマ法→近代法",type:"思想的継承",eras:["ancient-greece","rome","absolutism"],desc:"ギリシャの自然法思想がローマの万民法に影響し、ローマ法が近代ヨーロッパの法体系の基盤となった。モンテスキューの法思想もここに連なる。"},
+  {title:"ローマ帝国のキリスト教化→中世の教会権力",type:"宗教と政治",eras:["rome","early-medieval","high-medieval"],desc:"コンスタンティヌスの公認からテオドシウスの国教化を経て、教会はローマ帝国の行政機構を継承。中世では教皇が皇帝と並ぶ権力者に。"},
+  {title:"封建制の形成→崩壊→近代国家",type:"社会構造",eras:["early-medieval","14th-crisis","revolution-nation"],desc:"中世初期の安全保障ニーズから封建制が形成。黒死病と百年戦争で動揺し、絶対王政を経て市民革命で近代国家に移行。"},
+  {title:"十字軍→東方貿易→ルネサンス",type:"経済と文化",eras:["high-medieval","renaissance"],desc:"十字軍でオリエントとの接触が増加。イタリア都市国家が東方貿易で富を蓄積し、その富がルネサンス芸術のパトロネージを支えた。"},
+  {title:"印刷術→宗教改革→科学革命",type:"技術と思想",eras:["renaissance","reformation","absolutism"],desc:"グーテンベルクの印刷術がルターの思想を急速に拡散。同じ技術が科学論文の共有を可能にし、科学革命を加速。"},
+  {title:"宗教改革→宗教戦争→主権国家体制",type:"政治体制",eras:["reformation","absolutism"],desc:"宗教改革による信仰分裂が三十年戦争を引き起こし、ウェストファリア条約で主権国家体制と内政不干渉原則が確立。現代国際秩序の起源。"},
+  {title:"啓蒙思想→フランス革命→人権宣言",type:"思想と革命",eras:["absolutism","revolution-nation"],desc:"ヴォルテール・ルソー・モンテスキューの思想が社会契約論と人権概念を体系化。フランス革命で「自由・平等・友愛」として実践。"},
+  {title:"産業革命→帝国主義→世界大戦",type:"経済と軍事",eras:["revolution-nation","imperialism-wwi"],desc:"産業革命が生んだ圧倒的な経済力・軍事力が帝国主義的膨張を可能にし、列強間の競争が第一次世界大戦の構造的原因に。"},
+  {title:"ヴェルサイユ体制→ファシズム→WWII",type:"因果の連鎖",eras:["imperialism-wwi","interwar-wwii"],desc:"WWIの過酷な賠償と領土喪失がドイツの怨嗟を生み、世界恐慌と結びついてナチズムを台頭させ、WWIIへ。"},
+  {title:"WWII→欧州統合→EU",type:"平和への模索",eras:["interwar-wwii","cold-war-eu"],desc:"二度の大戦の反省から「再び戦争を不可能にする」ため石炭鉄鋼共同体が発足。段階的に統合を深化させEUに至る。"},
+  {title:"冷戦→ベルリンの壁→EU拡大",type:"東西対立と統合",eras:["cold-war-eu"],desc:"鉄のカーテンによるヨーロッパの東西分断が40年続き、1989年の壁崩壊後に東欧諸国がEUに加盟。統合の拡大と深化。"},
+  {title:"黒死病→農奴制崩壊→市民社会",type:"社会変革",eras:["14th-crisis","renaissance","reformation"],desc:"黒死病による人口激減が労働力の価値を高め、農奴制を弛緩させた。社会的流動性の増大がルネサンスの市民文化と宗教改革の社会基盤に。"},
+  {title:"ナポレオン法典→近代法の拡散",type:"法制度",eras:["revolution-nation"],desc:"ナポレオンの征服とともに市民法典がヨーロッパに広まり、身分制の廃止と法の下の平等が制度化された。"},
+  {title:"マルクス主義→ロシア革命→冷戦",type:"思想と体制",eras:["revolution-nation","imperialism-wwi","cold-war-eu"],desc:"マルクスの資本主義批判がレーニンによって実践されソ連が成立。資本主義vs社会主義の対立が冷戦の構造的基盤に。"},
+  {title:"ギリシャ民主制→近代民主主義",type:"政治理念の復活",eras:["ancient-greece","absolutism","revolution-nation"],desc:"アテナイの直接民主制の理念が啓蒙思想家によって再発見され、代議制民主主義として近代に実現。2400年の時を超えた影響。"}
+];
+
+const QUIZ_QUESTIONS = [
+  {q:"アテナイの直接民主制の黄金期を指導した政治家は？",opts:["ペリクレス","ソロン","クレイステネス","テミストクレス"],ans:0,explain:"ペリクレス（前495-429）はアテナイ民主制の全盛期を主導し、パルテノン神殿の建設を推進しました。"},
+  {q:"ローマが共和政から帝政に移行する契機となった人物は？",opts:["カエサル","オクタウィアヌス","スッラ","ポンペイウス"],ans:1,explain:"オクタウィアヌス（後のアウグストゥス）がアクティウムの海戦に勝利し、前27年にプリンキパトス（元首政）を確立しました。"},
+  {q:"800年にローマ皇帝として戴冠したフランク王は？",opts:["クローヴィス","ピピン","カール大帝","カール・マルテル"],ans:2,explain:"カール大帝（シャルルマーニュ）が800年のクリスマスにローマ教皇レオ3世から戴冠を受けました。"},
+  {q:"1095年に第1回十字軍を呼びかけた教皇は？",opts:["グレゴリウス7世","ウルバヌス2世","インノケンティウス3世","ボニファティウス8世"],ans:1,explain:"ウルバヌス2世がクレルモン教会会議で聖地奪還を呼びかけ、第1回十字軍が始まりました。"},
+  {q:"マグナ・カルタ（大憲章）が制定された年は？",opts:["1066年","1154年","1215年","1295年"],ans:2,explain:"1215年にイングランド王ジョンが貴族に強制されてマグナ・カルタに署名。王権制限の先駆けです。"},
+  {q:"14世紀のヨーロッパの人口を約1/3減少させた出来事は？",opts:["百年戦争","黒死病","モンゴル来襲","大飢饉"],ans:1,explain:"黒死病（ペスト）は1347-1351年にヨーロッパを席巻し、人口の約1/3が死亡しました。"},
+  {q:"活版印刷術を発明したのは？",opts:["カクストン","グーテンベルク","アルドゥス","フスト"],ans:1,explain:"ヨハネス・グーテンベルク（1400頃-1468）がマインツで活版印刷術を発明。知識の革命的な民主化に貢献しました。"},
+  {q:"ルネサンスの三大芸術家に含まれないのは？",opts:["レオナルド","ミケランジェロ","ラファエロ","ボッティチェリ"],ans:3,explain:"ルネサンスの三大巨匠はレオナルド・ダ・ヴィンチ、ミケランジェロ、ラファエロです。ボッティチェリも重要な画家ですが三大巨匠には含まれません。"},
+  {q:"1517年に95か条の論題を発表した宗教改革者は？",opts:["カルヴァン","ツヴィングリ","ルター","フス"],ans:2,explain:"マルティン・ルターが1517年にヴィッテンベルク城教会の扉に95か条の論題を掲示し、宗教改革が始まりました。"},
+  {q:"三十年戦争を終結させた条約は？",opts:["アウクスブルクの和議","ウェストファリア条約","ユトレヒト条約","パリ条約"],ans:1,explain:"1648年のウェストファリア条約で三十年戦争が終結。主権国家体制と内政不干渉原則が確立されました。"},
+  {q:"「朕は国家なり」と言ったとされるフランス王は？",opts:["ルイ13世","ルイ14世","ルイ15世","ルイ16世"],ans:1,explain:"ルイ14世（太陽王）は絶対王政の象徴。ヴェルサイユ宮殿を建設し72年間統治しました。"},
+  {q:"三権分立を提唱した啓蒙思想家は？",opts:["ヴォルテール","ルソー","モンテスキュー","ディドロ"],ans:2,explain:"モンテスキューが『法の精神』（1748）で立法・行政・司法の三権分立を提唱しました。"},
+  {q:"フランス革命の始まりとされるバスティーユ襲撃の年は？",opts:["1776年","1789年","1793年","1799年"],ans:1,explain:"1789年7月14日のバスティーユ牢獄襲撃がフランス革命の象徴的な始まりです。7月14日は現在もフランスの国民祝日。"},
+  {q:"「鉄血政策」でドイツ統一を実現した宰相は？",opts:["メッテルニヒ","ビスマルク","カヴール","ハルデンベルク"],ans:1,explain:"ビスマルクが三つの戦争（デンマーク・オーストリア・フランス）を通じて1871年にドイツ帝国を統一しました。"},
+  {q:"第一次世界大戦の直接的契機となった1914年の事件は？",opts:["モロッコ事件","バルカン戦争","サラエボ事件","ファショダ事件"],ans:2,explain:"1914年6月28日、サラエボでオーストリア皇太子フランツ・フェルディナントが暗殺され、WWIに発展しました。"},
+  {q:"ヴァイマル共和国が成立したのはどの出来事の後？",opts:["WWI敗北","世界恐慌","ヴェルサイユ条約","ミュンヘン一揆"],ans:0,explain:"1918年のWWI敗北とドイツ革命により帝政が崩壊し、ヴァイマル共和国が成立しました。"},
+  {q:"欧州統合の出発点となったシューマン宣言の年は？",opts:["1945年","1948年","1950年","1957年"],ans:2,explain:"1950年5月9日のシューマン宣言が欧州石炭鉄鋼共同体の設立を提案。現在5月9日はヨーロッパ・デーです。"},
+  {q:"ベルリンの壁が崩壊した年は？",opts:["1985年","1987年","1989年","1991年"],ans:2,explain:"1989年11月9日にベルリンの壁が崩壊。冷戦終結の象徴的出来事で、翌年ドイツ再統一が実現しました。"},
+  {q:"ナポレオンが最終的に敗北した戦いは？",opts:["トラファルガー","ライプツィヒ","ワーテルロー","アウステルリッツ"],ans:2,explain:"1815年のワーテルロー会戦でナポレオンが最終的に敗北。セントヘレナ島に流刑となり、1821年に死去しました。"},
+  {q:"EUの単一通貨ユーロが現金として流通開始した年は？",opts:["1992年","1999年","2002年","2004年"],ans:2,explain:"ユーロ紙幣・硬貨は2002年1月1日から12カ国で流通開始。1999年に帳簿上の通貨としては導入済みでした。"}
+];
+
+const GLOSSARY = [
+  {term:"ポリス",reading:"Polis",def:"古代ギリシャの都市国家。アテナイ、スパルタなどが代表的。政治・宗教・経済の自律的共同体。"},
+  {term:"民主制",reading:"Democracy",def:"デモス（民衆）+クラトス（支配）。アテナイの直接民主制が起源。成人男性市民が民会で直接投票。"},
+  {term:"パクス・ロマーナ",reading:"Pax Romana",def:"「ローマの平和」。前27年〜180年頃の約200年間の安定期。地中海世界の経済・文化が繁栄。"},
+  {term:"封建制",reading:"Feudalism",def:"主君が家臣に封土（領地）を与え、家臣は軍事的奉仕を行う中世的社会制度。荘園制と一体。"},
+  {term:"叙任権闘争",reading:"Investiture Controversy",def:"聖職者の任命権をめぐる教皇と皇帝の対立。カノッサの屈辱（1077）が象徴的。ヴォルムス協約（1122）で妥協。"},
+  {term:"十字軍",reading:"Crusades",def:"聖地エルサレム奪還を目的とした軍事遠征（1096-1291）。宗教的動機と政治・経済的利害が混在。"},
+  {term:"スコラ哲学",reading:"Scholasticism",def:"中世の大学で発展した学問方法。キリスト教神学とアリストテレス哲学の調和を目指す。トマス・アクィナスが代表。"},
+  {term:"黒死病",reading:"Black Death",def:"1347-51年のペスト大流行。ヨーロッパの人口の約1/3が死亡。社会構造に根本的変化をもたらした。"},
+  {term:"人文主義",reading:"Humanism",def:"ルネサンスの知的運動。古典古代の文献研究を通じて人間の尊厳と可能性を再発見。ペトラルカが先駆。"},
+  {term:"宗教改革",reading:"Reformation",def:"16世紀のキリスト教改革運動。ルターの95か条の論題（1517）に始まり、プロテスタント諸派が成立。"},
+  {term:"贖宥状",reading:"Indulgence",def:"罪の罰の免除を約束する教会の証書。販売が宗教改革の直接的契機に。「金貨が箱に落ちる音がすれば魂が天国に昇る」。"},
+  {term:"ウェストファリア体制",reading:"Westphalian System",def:"1648年の条約で確立された主権国家体制。領土的主権と内政不干渉が原則。現代国際秩序の基盤。"},
+  {term:"絶対王政",reading:"Absolute Monarchy",def:"国王に権力が集中する政治体制。17-18世紀のフランス（ルイ14世）が典型。常備軍・官僚制・重商主義が特徴。"},
+  {term:"啓蒙思想",reading:"Enlightenment",def:"18世紀の理性主義的思想運動。迷信・偏見・旧弊を批判し、理性による社会改革を追求。"},
+  {term:"社会契約論",reading:"Social Contract",def:"ホッブズ・ロック・ルソーが展開。国家は個人の自然権を守るための契約により成立するという理論。"},
+  {term:"三権分立",reading:"Separation of Powers",def:"モンテスキューが提唱。立法・行政・司法の権力を分立させ相互に抑制することで専制を防ぐ。"},
+  {term:"アンシャン・レジーム",reading:"Ancien Regime",def:"「旧体制」。フランス革命以前の身分制社会。聖職者（第一身分）・貴族（第二身分）・平民（第三身分）。"},
+  {term:"ナポレオン法典",reading:"Code Napoleon",def:"1804年制定の市民法典。法の下の平等・私有財産の保護・契約の自由。近代市民法の模範。"},
+  {term:"ウィーン体制",reading:"Vienna System",def:"1815年ウィーン会議で確立された国際秩序。正統主義と勢力均衡。メッテルニヒが主導。1848年革命で動揺。"},
+  {term:"帝国主義",reading:"Imperialism",def:"19世紀後半の列強によるアフリカ・アジアの植民地分割。経済的利益・国威発揚・文明化の使命が動機。"},
+  {term:"総力戦",reading:"Total War",def:"国家の全資源（軍事・経済・市民）を動員する近代的戦争形態。WWIで本格化。"},
+  {term:"ファシズム",reading:"Fascism",def:"極右的全体主義運動。国家主義・反共主義・指導者崇拝が特徴。ムッソリーニのイタリア、ヒトラーのドイツが代表。"},
+  {term:"ホロコースト",reading:"Holocaust",def:"ナチ・ドイツによるユダヤ人の組織的大量虐殺。約600万人が犠牲。アウシュヴィッツが象徴。人類史上最悪の犯罪の一つ。"},
+  {term:"冷戦",reading:"Cold War",def:"1947-1991年の米ソ対立。直接的な軍事衝突なく、イデオロギー・代理戦争・核軍拡で対峙。"},
+  {term:"鉄のカーテン",reading:"Iron Curtain",def:"チャーチルが1946年の演説で使った表現。東西ヨーロッパの分断を象徴。バルト海からアドリア海まで。"},
+  {term:"欧州統合",reading:"European Integration",def:"ECSC(1951)→EEC(1957)→EC→EU(1993)。経済統合から政治統合へ。平和と繁栄の追求。"},
+  {term:"ブレグジット",reading:"Brexit",def:"2016年の国民投票でイギリスがEU離脱を決定。2020年1月31日に正式離脱。EU統合への大きな挑戦。"}
+];
+
+// ============================================================
+// STATE
+// ============================================================
+let currentTab = 'timeline';
+let currentCountry = 'all';
+let bookmarks = JSON.parse(localStorage.getItem('eu-hist-bookmarks') || '[]');
+let quizState = {current:0, score:0, answered:false, finished:false};
+let shuffledQuiz = [];
+
+// Tabs where country filter is relevant
+const countryTabs = ['timeline','eras','people','connections'];
+
+// ============================================================
+// NAVIGATION
+// ============================================================
+document.querySelectorAll('.nav button').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.nav button').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    currentTab = btn.dataset.tab;
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.getElementById('sec-' + currentTab).classList.add('active');
+    // Show/hide country bar based on tab
+    const countryBar = document.getElementById('countryBar');
+    if(countryTabs.includes(currentTab)) {
+      countryBar.classList.remove('hidden');
+    } else {
+      countryBar.classList.add('hidden');
+    }
+    if(currentTab === 'quiz' && !quizState.finished && shuffledQuiz.length === 0) startQuiz();
+    if(currentTab === 'bookmarks') renderBookmarks();
+    // Scroll to top on tab change
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+});
+
+document.querySelectorAll('.country-bar button').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.country-bar button').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    currentCountry = btn.dataset.country;
+    renderAll();
+  });
+});
+
+// Search toggle with animation
+function toggleSearch() {
+  const bar = document.getElementById('searchBar');
+  const btn = document.getElementById('searchToggle');
+  if(bar.classList.contains('open')) {
+    bar.classList.remove('open');
+    btn.classList.remove('active');
+    document.getElementById('globalSearch').value = '';
+    renderAll();
+  } else {
+    bar.classList.add('open');
+    btn.classList.add('active');
+    setTimeout(() => document.getElementById('globalSearch').focus(), 150);
+  }
+}
+
+function handleGlobalSearch(val) {
+  if(!val.trim()) { renderAll(); return; }
+  renderTimeline(val);
+  renderEras(val);
+  renderPeople(val);
+  renderConnections(val);
+  renderGlossary(val);
+}
+
+// Scroll to top button
+window.addEventListener('scroll', () => {
+  const btn = document.getElementById('scrollTop');
+  if(window.scrollY > 300) {
+    btn.classList.add('visible');
+  } else {
+    btn.classList.remove('visible');
+  }
+});
+
+// ============================================================
+// FILTER
+// ============================================================
+function filterByCountry(items) {
+  if(currentCountry === 'all') return items;
+  return items.filter(i => i.countries && i.countries.includes(currentCountry));
+}
+
+function filterBySearch(items, search, fields) {
+  if(!search) return items;
+  const s = search.toLowerCase();
+  return items.filter(i => fields.some(f => {
+    const val = i[f];
+    if(Array.isArray(val)) return val.some(v => v.toLowerCase().includes(s));
+    return val && val.toLowerCase().includes(s);
+  }));
+}
+
+// ============================================================
+// RENDER: TIMELINE
+// ============================================================
+function renderTimeline(search) {
+  let eras = filterByCountry(ERAS);
+  if(search) eras = filterBySearch(eras, search, ['title','summary','tags','period']);
+  const container = document.getElementById('sec-timeline');
+  if(eras.length === 0) { container.innerHTML = '<p style="text-align:center;color:var(--text2);padding:40px">該当する時代がありません</p>'; return; }
+  container.innerHTML = '<div class="timeline">' + eras.map(era => {
+    const isBookmarked = bookmarks.some(b => b.id === era.id && b.type === 'era');
+    return `<div class="tl-item ${isBookmarked ? 'bookmarked' : ''}" onclick="openEraModal('${era.id}')">
+      <div class="tl-dot"></div>
+      <div class="tl-card">
+        <div class="tl-era">ERA</div>
+        <div class="tl-title">${era.title}</div>
+        <div class="tl-period">${era.period}</div>
+        <div class="tl-desc">${era.summary}</div>
+        <div class="tl-tags">${era.tags.map(t => `<span class="tl-tag">${t}</span>`).join('')}</div>
+      </div>
+    </div>`;
+  }).join('') + '</div>';
+}
+
+// ============================================================
+// RENDER: ERA CARDS
+// ============================================================
+function renderEras(search) {
+  let eras = filterByCountry(ERAS);
+  if(search) eras = filterBySearch(eras, search, ['title','summary','tags','period']);
+  const container = document.getElementById('sec-eras');
+  if(eras.length === 0) { container.innerHTML = '<p style="text-align:center;color:var(--text2);padding:40px">該当する時代がありません</p>'; return; }
+  container.innerHTML = `<div class="section-count">${eras.length}つの時代</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px">` +
+    eras.map(era => `<div class="tl-card" style="cursor:pointer" onclick="openEraModal('${era.id}')">
+      <div class="tl-era">${era.period}</div>
+      <div class="tl-title">${era.title}</div>
+      <div class="tl-desc">${era.summary}</div>
+      <div class="tl-tags" style="margin-top:8px">${era.tags.map(t => `<span class="tl-tag">${t}</span>`).join('')}</div>
+    </div>`).join('') + '</div>';
+}
+
+// ============================================================
+// ERA MODAL
+// ============================================================
+function openEraModal(id) {
+  const era = ERAS.find(e => e.id === id);
+  if(!era) return;
+  const isBookmarked = bookmarks.some(b => b.id === era.id && b.type === 'era');
+  document.getElementById('modalContent').innerHTML = `
+    <button class="modal-close" onclick="closeModal()">&times;</button>
+    <h2>${era.title}</h2>
+    <div class="period">${era.period}</div>
+    <div class="modal-section">
+      <h3>概要</h3>
+      <p>${era.summary}</p>
+    </div>
+    <div class="modal-section">
+      <h3>政治体制</h3>
+      <p>${era.politics}</p>
+    </div>
+    <div class="modal-section">
+      <h3>主要事件</h3>
+      <ul>${era.events.map(e => `<li>${e}</li>`).join('')}</ul>
+    </div>
+    <div class="modal-section">
+      <h3>重要人物</h3>
+      <ul>${era.figures.map(f => {
+        const person = PEOPLE.find(p => p.name === f);
+        return person
+          ? `<li style="cursor:pointer;color:var(--accent2)" onclick="closeModal();setTimeout(()=>openPersonModal('${f}'),200)">${f}</li>`
+          : `<li>${f}</li>`;
+      }).join('')}</ul>
+    </div>
+    <div class="modal-section">
+      <h3>文化・思想</h3>
+      <p>${era.culture}</p>
+    </div>
+    <div class="modal-section">
+      <h3>経済</h3>
+      <p>${era.economy}</p>
+    </div>
+    <div class="causal-box">
+      <h4>← 前の時代からの因果</h4>
+      <p>${era.causeBefore}</p>
+    </div>
+    <div class="causal-box" style="margin-top:8px;border-left-color:var(--accent)">
+      <h4>→ 次の時代への因果</h4>
+      <p>${era.causeAfter}</p>
+    </div>
+    <button class="bookmark-btn ${isBookmarked ? 'active' : ''}" onclick="toggleBookmark('${era.id}','era','${era.title}')">
+      ${isBookmarked ? '★ ブックマーク済み' : '☆ ブックマークに追加'}
+    </button>
+  `;
+  document.getElementById('modalOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+  document.getElementById('modalOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+// ============================================================
+// RENDER: PEOPLE
+// ============================================================
+function renderPeople(search) {
+  let people = filterByCountry(PEOPLE);
+  if(search) people = filterBySearch(people, search, ['name','sub','role','desc','era']);
+  const container = document.getElementById('sec-people');
+  if(people.length === 0) { container.innerHTML = '<p style="text-align:center;color:var(--text2);padding:40px">該当する人物がいません</p>'; return; }
+  container.innerHTML = `<div class="section-count">${people.length}人の人物</div>
+    <div class="people-grid">${people.map(p => `<div class="person-card" onclick="openPersonModal('${p.name}')">
+      <div class="person-name">${p.name}</div>
+      <div class="person-name-sub">${p.sub}</div>
+      <div class="person-life">${p.life}</div>
+      <div class="person-role">${p.role}</div>
+      <div class="person-desc">${p.desc.substring(0, 60)}...</div>
+      <div class="person-countries">${p.countries.map(c => `<span class="person-country">${countryLabel(c)}</span>`).join('')}</div>
+    </div>`).join('')}</div>`;
+}
+
+function countryLabel(c) {
+  const map = {france:'フランス',germany:'ドイツ',britain:'イギリス',italy:'イタリア',spain:'スペイン',russia:'ロシア',greece:'ギリシャ',rome:'ローマ'};
+  return map[c] || c;
+}
+
+function openPersonModal(name) {
+  const p = PEOPLE.find(x => x.name === name);
+  if(!p) return;
+  const eraObj = ERAS.find(e => e.id === p.era);
+  const isBookmarked = bookmarks.some(b => b.id === p.name && b.type === 'person');
+  // Find related people from the same era
+  const related = PEOPLE.filter(x => x.era === p.era && x.name !== p.name).slice(0, 4);
+  document.getElementById('modalContent').innerHTML = `
+    <button class="modal-close" onclick="closeModal()">&times;</button>
+    <h2>${p.name}</h2>
+    <div style="font-size:.85rem;color:var(--text2);margin-bottom:4px">${p.sub}</div>
+    <div class="period">${p.life}</div>
+    <div class="modal-section">
+      <h3>${p.role}</h3>
+      <p>${p.desc}</p>
+    </div>
+    <div class="modal-section">
+      <h3>時代</h3>
+      <p style="cursor:pointer;color:var(--accent2)" onclick="closeModal();setTimeout(()=>openEraModal('${p.era}'),200)">${eraObj ? eraObj.title + ' (' + eraObj.period + ')' : p.era}</p>
+    </div>
+    <div class="modal-section">
+      <h3>関連国</h3>
+      <p>${p.countries.map(c => countryLabel(c)).join('、')}</p>
+    </div>
+    ${related.length > 0 ? `<div class="modal-section">
+      <h3>同時代の人物</h3>
+      <div style="display:flex;flex-wrap:wrap;gap:6px">${related.map(r =>
+        `<span style="cursor:pointer;font-size:.78rem;padding:4px 10px;background:var(--card);border:1px solid var(--border);border-radius:8px;color:var(--accent2);transition:all .2s" onclick="closeModal();setTimeout(()=>openPersonModal('${r.name}'),200)" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='var(--border)'">${r.name}</span>`
+      ).join('')}</div>
+    </div>` : ''}
+    <button class="bookmark-btn ${isBookmarked ? 'active' : ''}" onclick="toggleBookmark('${p.name}','person','${p.name}')">
+      ${isBookmarked ? '★ ブックマーク済み' : '☆ ブックマークに追加'}
+    </button>
+  `;
+  document.getElementById('modalOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+// ============================================================
+// RENDER: CONNECTIONS
+// ============================================================
+function renderConnections(search) {
+  let conns = CONNECTIONS;
+  if(search) conns = conns.filter(c => {
+    const s = search.toLowerCase();
+    return c.title.toLowerCase().includes(s) || c.desc.toLowerCase().includes(s) || c.type.toLowerCase().includes(s);
+  });
+  const container = document.getElementById('sec-connections');
+  if(conns.length === 0) { container.innerHTML = '<p style="text-align:center;color:var(--text2);padding:40px">該当する因果関係がありません</p>'; return; }
+  container.innerHTML = `<div class="section-count">時代を超えた因果関係・テーマ別つながり (${conns.length}件)</div>
+    <div class="conn-grid">${conns.map(c => `<div class="conn-card">
+      <div class="conn-title">${c.title}</div>
+      <span class="conn-type">${c.type}</span>
+      <div class="conn-desc">${c.desc}</div>
+      <div class="conn-eras">${c.eras.map(e => {const era = ERAS.find(x=>x.id===e); return `<span class="conn-era" onclick="openEraModal('${e}')">${era?era.title:e}</span>`;}).join('')}</div>
+    </div>`).join('')}</div>`;
+}
+
+// ============================================================
+// QUIZ
+// ============================================================
+function startQuiz() {
+  shuffledQuiz = [...QUIZ_QUESTIONS].sort(() => Math.random() - 0.5);
+  quizState = {current: 0, score: 0, answered: false, finished: false};
+  renderQuiz();
+}
+
+function renderQuiz() {
+  const container = document.getElementById('sec-quiz');
+  if(quizState.finished) {
+    const pct = Math.round(quizState.score / shuffledQuiz.length * 100);
+    let msg, grade;
+    if(pct >= 90) { msg = '素晴らしい！ヨーロッパ史マスター！'; grade = 'S'; }
+    else if(pct >= 80) { msg = '優秀です！あと少しで完璧！'; grade = 'A'; }
+    else if(pct >= 60) { msg = 'よくできました。復習でさらに伸ばしましょう。'; grade = 'B'; }
+    else if(pct >= 40) { msg = 'まずまずです。苦手な時代を重点的に復習しましょう。'; grade = 'C'; }
+    else { msg = 'もう一度挑戦して理解を深めましょう。'; grade = 'D'; }
+    container.innerHTML = `<div class="quiz-container"><div class="quiz-result">
+      <div style="font-size:3rem;margin-bottom:8px;opacity:.8">${grade}</div>
+      <h2>${pct}% 正解</h2>
+      <p style="font-size:1.1rem">${quizState.score} / ${shuffledQuiz.length} 問正解</p>
+      <p style="margin-bottom:24px;color:var(--text2)">${msg}</p>
+      <button class="quiz-restart" onclick="startQuiz()">もう一度挑戦</button>
+    </div></div>`;
+    return;
+  }
+  const q = shuffledQuiz[quizState.current];
+  container.innerHTML = `<div class="quiz-container">
+    <div class="quiz-header">
+      <div class="quiz-progress">問題 ${quizState.current + 1} / ${shuffledQuiz.length}</div>
+      <div class="quiz-score">正解: ${quizState.score}</div>
+    </div>
+    <div style="height:4px;background:rgba(26,26,62,.8);border-radius:2px;margin-bottom:16px;overflow:hidden">
+      <div style="height:100%;width:${(quizState.current/shuffledQuiz.length)*100}%;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:2px;transition:.4s ease"></div>
+    </div>
+    <div class="quiz-question">
+      <div class="quiz-q">${q.q}</div>
+      <div class="quiz-options">${q.opts.map((opt, i) => `<button class="quiz-opt" onclick="answerQuiz(${i})" id="qopt${i}">${opt}</button>`).join('')}</div>
+      <div class="quiz-explain" id="quizExplain">${q.explain}</div>
+      <button class="quiz-next" id="quizNext" onclick="nextQuiz()">次の問題 →</button>
+    </div>
+  </div>`;
+}
+
+function answerQuiz(idx) {
+  if(quizState.answered) return;
+  quizState.answered = true;
+  const q = shuffledQuiz[quizState.current];
+  document.querySelectorAll('.quiz-opt').forEach(b => b.classList.add('disabled'));
+  if(idx === q.ans) {
+    document.getElementById('qopt' + idx).classList.add('correct');
+    quizState.score++;
+  } else {
+    document.getElementById('qopt' + idx).classList.add('wrong');
+    document.getElementById('qopt' + q.ans).classList.add('correct');
+  }
+  document.getElementById('quizExplain').classList.add('show');
+  document.getElementById('quizNext').classList.add('show');
+}
+
+function nextQuiz() {
+  quizState.current++;
+  quizState.answered = false;
+  if(quizState.current >= shuffledQuiz.length) {
+    quizState.finished = true;
+  }
+  renderQuiz();
+}
+
+// ============================================================
+// GLOSSARY
+// ============================================================
+function renderGlossary(search) {
+  const container = document.getElementById('sec-glossary');
+  const items = search ? GLOSSARY.filter(g => {
+    const s = search.toLowerCase();
+    return g.term.toLowerCase().includes(s) || g.reading.toLowerCase().includes(s) || g.def.toLowerCase().includes(s);
+  }) : GLOSSARY;
+  container.innerHTML = `<input class="glossary-search" placeholder="用語を検索..." oninput="filterGlossary(this.value)" value="${search||''}">
+    <div class="section-count">${items.length}件の用語</div>
+    <div class="glossary-list" id="glossaryList">${renderGlossaryItems(items)}</div>`;
+}
+
+function renderGlossaryItems(items) {
+  if(items.length === 0) return '<p style="text-align:center;color:var(--text2);padding:20px">該当する用語がありません</p>';
+  return items.map(g => `<div class="glossary-item">
+    <div class="glossary-term">${g.term}</div>
+    <div class="glossary-reading">${g.reading}</div>
+    <div class="glossary-def">${g.def}</div>
+  </div>`).join('');
+}
+
+function filterGlossary(val) {
+  const s = val.toLowerCase();
+  const filtered = s ? GLOSSARY.filter(g => g.term.toLowerCase().includes(s) || g.reading.toLowerCase().includes(s) || g.def.toLowerCase().includes(s)) : GLOSSARY;
+  document.getElementById('glossaryList').innerHTML = renderGlossaryItems(filtered);
+}
+
+// ============================================================
+// BOOKMARKS
+// ============================================================
+function toggleBookmark(id, type, title) {
+  const idx = bookmarks.findIndex(b => b.id === id && b.type === type);
+  if(idx >= 0) {
+    bookmarks.splice(idx, 1);
+  } else {
+    bookmarks.push({id, type, title});
+  }
+  localStorage.setItem('eu-hist-bookmarks', JSON.stringify(bookmarks));
+  updateBmBadge();
+  renderAll();
+  // Re-open modal with updated state
+  if(type === 'era') openEraModal(id);
+  else if(type === 'person') openPersonModal(id);
+}
+
+function renderBookmarks() {
+  const container = document.getElementById('sec-bookmarks');
+  if(bookmarks.length === 0) {
+    container.innerHTML = '<div class="bookmarks-empty"><div class="empty-icon">☆</div><p>ブックマークはまだありません</p><p style="font-size:.8rem;margin-top:8px">時代や人物をブックマークに追加してみましょう</p></div>';
+    return;
+  }
+  container.innerHTML = `<div class="section-count">${bookmarks.length}件のブックマーク</div>
+    <div class="bm-list">${bookmarks.map((b, i) => `<div class="bm-item">
+      <div class="bm-info" onclick="${b.type === 'era' ? `openEraModal('${b.id}')` : `openPersonModal('${b.id}')`}">
+        <div class="bm-title">${b.title}</div>
+        <div class="bm-type">${b.type === 'era' ? '時代' : '人物'}</div>
+      </div>
+      <button class="bm-remove" onclick="removeBookmark(${i})">削除</button>
+    </div>`).join('')}</div>`;
+}
+
+function removeBookmark(idx) {
+  bookmarks.splice(idx, 1);
+  localStorage.setItem('eu-hist-bookmarks', JSON.stringify(bookmarks));
+  updateBmBadge();
+  renderBookmarks();
+}
+
+function updateBmBadge() {
+  const badge = document.getElementById('bmBadge');
+  if(badge) badge.textContent = bookmarks.length;
+}
+
+// ============================================================
+// HEADER STATS
+// ============================================================
+function updateHeaderStats() {
+  const el = document.getElementById('headerStats');
+  if(el) el.innerHTML = `${ERAS.length}時代 / ${PEOPLE.length}人物 / ${QUIZ_QUESTIONS.length}問`;
+}
+
+// ============================================================
+// RENDER ALL
+// ============================================================
+function renderAll() {
+  renderTimeline();
+  renderEras();
+  renderPeople();
+  renderConnections();
+  renderGlossary();
+}
+
+// Keyboard
+document.addEventListener('keydown', e => {
+  if(e.key === 'Escape') closeModal();
+  // Ctrl+K for search
+  if((e.ctrlKey || e.metaKey) && e.key === 'k') {
+    e.preventDefault();
+    toggleSearch();
+  }
+});
+
+// Init
+renderAll();
+updateBmBadge();
+updateHeaderStats();
+
+// ============================================================
+// PWA Service Worker Registration
+// ============================================================
+if('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('sw.js').catch(() => {});
+}
+</script>
+</body>
+</html>
